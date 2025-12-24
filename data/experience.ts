@@ -1,0 +1,57 @@
+import { Experience } from '@/types'
+
+export const experiences: Experience[] = [
+  {
+    company: 'Wright Research',
+    role: 'Software Engineer (Full-Stack / Platform)',
+    period: 'Dec 2023 – Present',
+    location: 'Remote',
+    description: 'Architecting and scaling production FinTech platform serving 25,000+ users. Leading platform engineering initiatives with focus on performance, security, and scalability.',
+    achievements: [
+      'Architected and scaled Django + DRF backend systems serving 25,000+ users',
+      'Led and mentored 5+ interns & junior engineers',
+      'Optimized database routing, indexing, and query patterns → 60–80% faster dashboards',
+      'Migrated caching from Memcached → Redis, achieving 70–85% cache hit rate',
+      'Reduced API latency from 2–3s → <500ms',
+      'Built Mutual Fund Review System end-to-end: 1000+ portfolios processed with risk, diversification & benchmark analysis',
+      'Improved performance: PageSpeed 75+ mobile, 90+ desktop, reduced page weight by 15–20MB',
+      'Security hardening: CERT-In compliance, fixed OWASP A2, A3, A5, A7, A10, implemented CSP, HSTS, secure headers',
+      'Owned production ops on GCP: Nginx, Gunicorn, Redis, Cloud CDN with 99.9% uptime',
+      'Reduced incident resolution time by 30%',
+    ],
+    technologies: ['Django', 'DRF', 'Redis', 'PostgreSQL', 'React 18', 'TypeScript', 'GCP', 'Nginx', 'Gunicorn', 'Cloud CDN'],
+  },
+  {
+    company: 'Spring Street',
+    role: 'Founding Engineer (Full-Stack / Platform)',
+    period: 'Nov 2025 – Present',
+    location: 'Remote',
+    description: 'Built fintech platform from scratch, owning backend, frontend, and infrastructure end-to-end. Live at springstreet.in',
+    achievements: [
+      'Built fintech platform from scratch with Go (Goa framework) backend',
+      'Implemented JWT authentication and RBAC for secure access control',
+      'Designed and implemented PostgreSQL schema with GORM for type-safe operations',
+      'Built React 18 + TypeScript frontend with Vite code-splitting & lazy loading',
+      'Achieved 40–50% bundle size reduction through optimization',
+      'Deployed on GCP with Docker and Kubernetes (GKE) for scalability',
+      'Integrated Redis for caching and session management',
+      'Set up Prometheus for observability and monitoring',
+      'Implemented CI/CD pipelines for automated deployments',
+    ],
+    technologies: ['Go', 'Goa', 'Gin', 'PostgreSQL', 'GORM', 'JWT', 'RBAC', 'React 18', 'TypeScript', 'Vite', 'Docker', 'Kubernetes', 'GKE', 'GCP', 'Redis', 'Prometheus', 'CI/CD'],
+  },
+  {
+    company: 'Floworx',
+    role: 'Junior Software Engineer',
+    period: 'Sept 2023 – Nov 2023',
+    location: 'Bengaluru',
+    description: 'Developed backend APIs and services using Node.js, Express, and TypeScript',
+    achievements: [
+      'Built backend APIs using Node.js, Express, TypeScript',
+      'Developed PostgreSQL-backed services with optimized queries',
+      'Developed and documented Spring Boot APIs',
+      'Created comprehensive API documentation via Swagger',
+    ],
+    technologies: ['Node.js', 'Express', 'TypeScript', 'PostgreSQL', 'Spring Boot', 'Swagger'],
+  },
+]

@@ -4,14 +4,14 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { ThemeToggle } from './theme-toggle'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, User, Briefcase, FolderKanban, Code, Mail, Home } from 'lucide-react'
 
 const navItems = [
-  { name: 'About', href: '#about' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'About', href: '#about', icon: User },
+  { name: 'Experience', href: '#experience', icon: Briefcase },
+  { name: 'Projects', href: '#projects', icon: FolderKanban },
+  { name: 'Skills', href: '#skills', icon: Code },
+  { name: 'Contact', href: '#contact', icon: Mail },
 ]
 
 export function Navbar() {
@@ -54,39 +54,48 @@ export function Navbar() {
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className={`fixed top-0 z-50 w-full transition-all duration-300 ${
         scrolled 
-          ? 'border-b border-border/50 bg-background/95 backdrop-blur-xl shadow-lg shadow-black/5' 
+          ? 'border-b border-border/30 bg-background/80 backdrop-blur-xl shadow-lg' 
           : 'bg-transparent'
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6 md:py-4">
+        {/* Logo */}
         <motion.a
           href="#"
           onClick={(e) => {
             e.preventDefault()
             window.scrollTo({ top: 0, behavior: 'smooth' })
           }}
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="relative flex items-center group"
+          className="relative flex items-center gap-2 group"
         >
           <motion.div
-            className="absolute inset-0 rounded-lg bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 blur-xl transition-opacity"
+            className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 blur-xl transition-opacity"
             transition={{ duration: 0.3 }}
           />
-          <Image
-            src="/logo-H.png"
-            alt="Hritik Singh Logo"
-            width={40}
-            height={40}
-            className="relative h-8 w-8 md:h-10 md:w-10 transition-transform group-hover:rotate-3"
-            priority
-          />
+          <div className="relative p-2 rounded-lg bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 group-hover:border-blue-500/40 transition-colors">
+            <Image
+              src="/logo-H.png"
+              alt="Hritik Singh Logo"
+              width={32}
+              height={32}
+              className="relative h-6 w-6 md:h-8 md:w-8 transition-transform group-hover:rotate-3"
+              priority
+            />
+          </div>
+          {!scrolled && (
+            <span className="hidden md:block text-lg font-semibold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Hritik Singh
+            </span>
+          )}
         </motion.a>
 
         {/* Desktop nav */}
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-2 md:flex">
           {navItems.map((item, index) => {
             const isActive = activeSection === item.href
+            const Icon = item.icon
             return (
               <motion.a
                 key={item.name}
@@ -98,26 +107,45 @@ export function Navbar() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -2 }}
-                className="relative px-4 py-2 text-sm font-medium transition-colors"
+                whileHover={{ y: -2, scale: 1.02 }}
+                className="relative group"
               >
-                <span className={`relative z-10 ${isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}>
-                  {item.name}
-                </span>
-                {isActive && (
-                  <motion.div
-                    layoutId="activeNav"
-                    className="absolute inset-0 rounded-lg bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 border border-purple-500/20"
-                    initial={false}
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
                 <motion.div
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500"
-                  initial={{ scaleX: 0 }}
-                  whileHover={{ scaleX: 1 }}
-                  transition={{ duration: 0.3 }}
-                />
+                  className={`relative px-4 py-2.5 rounded-xl transition-all ${
+                    isActive
+                      ? 'bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 border border-blue-500/30'
+                      : 'bg-background/50 border border-border/50 hover:border-blue-500/40 hover:bg-gradient-to-r hover:from-blue-500/10 hover:via-purple-500/10 hover:to-pink-500/10'
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Icon 
+                      className={`h-4 w-4 transition-colors ${
+                        isActive 
+                          ? 'text-blue-400' 
+                          : 'text-muted-foreground group-hover:text-blue-400'
+                      }`} 
+                    />
+                    <span 
+                      className={`text-sm font-medium transition-colors ${
+                        isActive 
+                          ? 'text-foreground' 
+                          : 'text-muted-foreground group-hover:text-foreground'
+                      }`}
+                    >
+                      {item.name}
+                    </span>
+                  </div>
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeNavIndicator"
+                      className="absolute -bottom-1 left-1/2 h-1 w-1/2 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 -translate-x-1/2"
+                      initial={false}
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </motion.div>
               </motion.a>
             )
           })}
@@ -137,7 +165,7 @@ export function Navbar() {
           <motion.button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             whileTap={{ scale: 0.95 }}
-            className="relative p-2 rounded-lg hover:bg-accent transition-colors"
+            className="relative p-2.5 rounded-xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-border/50 hover:border-blue-500/40 transition-colors"
             aria-label="Toggle menu"
           >
             <AnimatePresence mode="wait">
@@ -149,7 +177,7 @@ export function Navbar() {
                   exit={{ rotate: 90, opacity: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <X className="h-6 w-6" />
+                  <X className="h-5 w-5" />
                 </motion.div>
               ) : (
                 <motion.div
@@ -159,7 +187,7 @@ export function Navbar() {
                   exit={{ rotate: -90, opacity: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <Menu className="h-6 w-6" />
+                  <Menu className="h-5 w-5" />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -175,11 +203,12 @@ export function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="border-t border-border/50 bg-background/95 backdrop-blur-xl md:hidden overflow-hidden"
+            className="border-t border-border/30 bg-background/95 backdrop-blur-xl md:hidden overflow-hidden"
           >
-            <div className="flex flex-col px-4 py-4 gap-1">
+            <div className="flex flex-col px-4 py-4 gap-2">
               {navItems.map((item, index) => {
                 const isActive = activeSection === item.href
+                const Icon = item.icon
                 return (
                   <motion.a
                     key={item.name}
@@ -191,13 +220,26 @@ export function Navbar() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className={`relative px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                    className={`relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                       isActive 
-                        ? 'text-foreground bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10' 
-                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                        ? 'bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 border border-blue-500/30 text-foreground' 
+                        : 'border border-border/50 bg-background/50 hover:border-blue-500/40 hover:bg-gradient-to-r hover:from-blue-500/10 hover:via-purple-500/10 hover:to-pink-500/10 text-muted-foreground hover:text-foreground'
                     }`}
                   >
-                    {item.name}
+                    <Icon 
+                      className={`h-5 w-5 ${
+                        isActive ? 'text-blue-400' : 'text-muted-foreground'
+                      }`} 
+                    />
+                    <span>{item.name}</span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeMobileNav"
+                        className="absolute right-4 h-2 w-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
+                        initial={false}
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
                   </motion.a>
                 )
               })}

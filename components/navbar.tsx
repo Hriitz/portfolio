@@ -23,28 +23,101 @@ export function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
       
-      // Detect active section
+      // Detect active section with proper offset for mobile navbar
       const sections = navItems.map(item => item.href.substring(1))
-      const scrollPosition = window.scrollY + 100
+      const headerOffset = 100
+      const scrollPosition = window.scrollY + headerOffset
       
-      for (const section of sections.reverse()) {
+      // Find the current active section
+      let currentSection = ''
+      for (const section of sections) {
         const element = document.getElementById(section)
-        if (element && element.offsetTop <= scrollPosition) {
-          setActiveSection(`#${section}`)
-          break
+        if (element) {
+          const elementTop = element.getBoundingClientRect().top + window.pageYOffset
+          const elementBottom = elementTop + element.offsetHeight
+          
+          if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
+            currentSection = `#${section}`
+            break
+          }
         }
       }
+      
+      // If no section found, check reverse order for scroll position
+      if (!currentSection) {
+        for (const section of sections.reverse()) {
+          const element = document.getElementById(section)
+          if (element && element.getBoundingClientRect().top + window.pageYOffset <= scrollPosition) {
+            currentSection = `#${section}`
+            break
+          }
+        }
+      }
+      
+      setActiveSection(currentSection)
     }
     
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll() // Initial check
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+  
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      if (!target.closest('nav')) {
+        setMobileMenuOpen(false)
+      }
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleEscape)
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, [mobileMenuOpen])
+  
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [mobileMenuOpen])
 
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false)
-    const element = document.querySelector(href)
-    element?.scrollIntoView({ behavior: 'smooth' })
+    
+    // Small delay to allow menu to close smoothly
+    setTimeout(() => {
+      const element = document.querySelector(href)
+      if (element) {
+        const headerOffset = 80 // Account for fixed navbar height
+        const elementPosition = element.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    }, 100)
   }
 
   return (
@@ -64,6 +137,7 @@ export function Navbar() {
           href="#"
           onClick={(e) => {
             e.preventDefault()
+            setMobileMenuOpen(false)
             window.scrollTo({ top: 0, behavior: 'smooth' })
           }}
           whileHover={{ scale: 1.05 }}
@@ -203,7 +277,7 @@ export function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="border-t border-border/30 bg-background/95 backdrop-blur-xl md:hidden overflow-hidden"
+            className="border-t border-border/30 bg-background/95 backdrop-blur-xl md:hidden overflow-hidden z-50"
           >
             <div className="flex flex-col px-4 py-4 gap-2">
               {navItems.map((item, index) => {

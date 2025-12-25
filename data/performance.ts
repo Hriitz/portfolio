@@ -3,7 +3,7 @@ import { PerformanceMetric } from '@/types'
 export const performanceMetrics: PerformanceMetric[] = [
   {
     label: 'Users Served',
-    value: '25,000+',
+    value: '25k+',
     improvement: 'Wright Research Platform',
     description: 'Production FinTech platform',
   },

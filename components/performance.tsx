@@ -35,13 +35,55 @@ function AnimatedCounter({ value }: { value: string }) {
   const ref = useRef<HTMLSpanElement>(null)
   const isInView = useInView(ref, { once: true })
   
-  const numericMatch = value.match(/[\d.]+/)
-  const numericValue = numericMatch ? parseFloat(numericMatch[0]) : null
+  // Handle special cases that shouldn't be animated (like "90+ / 75+")
+  const hasSlash = value.includes('/')
+  const hasFaster = value.toLowerCase().includes('faster')
+  
+  // Extract numeric value - handle comma-separated numbers and k/m suffixes
+  let numericValue: number | null = null
+  let suffix = ''
+  let prefix = ''
+  
+  // Check for k (thousands) suffix
+  if (value.toLowerCase().includes('k')) {
+    const match = value.match(/([\d.]+)k/i)
+    if (match) {
+      numericValue = parseFloat(match[1]) * 1000
+      suffix = 'k'
+    }
+  } else {
+    // Extract first number (handles comma-separated)
+    const numericMatch = value.match(/[\d,]+\.?\d*/)
+    if (numericMatch) {
+      const numStr = numericMatch[0].replace(/,/g, '')
+      numericValue = parseFloat(numStr)
+    }
+  }
+  
+  // Extract prefix (like "<") and suffix units (like "ms", "s", "%", "k")
+  if (value.includes('<')) prefix = '<'
+  if (value.includes('ms')) suffix = 'ms'
+  else if (value.includes('s') && !value.includes('ms') && !hasFaster) suffix = 's'
+  else if (value.includes('%')) suffix = '%'
+  else if (value.includes('k')) suffix = 'k'
+  
+  // Extract "faster" text if present
+  const fasterText = hasFaster ? ' faster' : ''
+  
   const hasPlus = value.includes('+')
-  const hasLessThan = value.includes('<')
   const hasReduced = value.includes('Reduced')
   const hasPercent = value.includes('%')
-  const hasDash = value.includes('-')
+  const hasDash = value.includes('-') && !hasReduced
+  
+  // For values with slash (like "90+ / 75+"), don't animate, just show as-is
+  if (hasSlash) {
+    useEffect(() => {
+      if (isInView && ref.current) {
+        ref.current.textContent = value
+      }
+    }, [isInView, value])
+    return <span ref={ref}>{value}</span>
+  }
   
   const motionValue = useMotionValue(0)
   const springValue = useSpring(motionValue, {
@@ -51,7 +93,13 @@ function AnimatedCounter({ value }: { value: string }) {
 
   useEffect(() => {
     if (isInView && numericValue !== null && !isNaN(numericValue)) {
-      motionValue.set(numericValue)
+      // If we have a k suffix, animate the original value (like 25), not 25000
+      if (value.toLowerCase().includes('k') && !value.match(/[\d,]+k/)) {
+        const kMatch = value.match(/([\d.]+)k/i)
+        motionValue.set(parseFloat(kMatch?.[1] || '0'))
+      } else {
+        motionValue.set(numericValue)
+      }
     } else if (isInView && numericValue === null) {
       if (ref.current) {
         ref.current.textContent = value
@@ -64,32 +112,48 @@ function AnimatedCounter({ value }: { value: string }) {
     
     const unsubscribe = springValue.on('change', (latest) => {
       if (ref.current) {
-        const decimals = value.includes('.') ? 1 : 0
-        const formatted = latest.toFixed(decimals)
+        const decimals = value.includes('.') && !value.includes('k') ? 1 : 0
+        let formatted = latest.toFixed(decimals).replace(/\.0$/, '')
+        
+        // Handle k suffix - show the k value, not the full number
+        if (value.toLowerCase().includes('k') && suffix === 'k') {
+          const kMatch = value.match(/([\d.]+)k/i)
+          if (kMatch) {
+            formatted = parseFloat(kMatch[1]).toString()
+          }
+        }
         
         if (hasReduced) {
-          ref.current.textContent = `Reduced ${formatted}${hasDash ? '-' : ''}${hasPercent ? '%' : ''}`
-        } else if (hasLessThan) {
-          ref.current.textContent = `<${formatted}${hasPercent ? '' : hasDash ? '-' : 's'}`
-        } else if (hasPlus) {
-          ref.current.textContent = `${formatted.replace(/\.0$/, '')}+`
-        } else if (hasDash && !hasReduced) {
-          // Handle ranges like "70-85"
+          const rangeMatch = value.match(/Reduced\s+([\d.]+)-?([\d.]+)?%?/i)
+          if (rangeMatch && rangeMatch[2]) {
+            ref.current.textContent = `Reduced ${formatted}-${rangeMatch[2]}%`
+          } else {
+            ref.current.textContent = `Reduced ${formatted}${hasPercent ? '%' : ''}`
+          }
+        } else if (hasDash) {
+          // Handle ranges like "70-85%" or "60-80% faster"
           const parts = value.split('-')
           if (parts.length === 2) {
-            const secondNum = parts[1].match(/[\d.]+/)?.[0]
-            ref.current.textContent = `${formatted.replace(/\.0$/, '')}-${secondNum || ''}${hasPercent ? '%' : ''}`
+            const secondPart = parts[1]
+            const secondNum = secondPart.match(/[\d.]+/)?.[0]
+            const secondSuffix = secondPart.match(/(%|ms|s|k)/)?.[0] || ''
+            ref.current.textContent = `${formatted}-${secondNum || ''}${suffix || secondSuffix || (hasPercent ? '%' : '')}${fasterText}`
           } else {
-            ref.current.textContent = `${formatted}${hasPercent ? '%' : ''}`
+            ref.current.textContent = `${formatted}${suffix || (hasPercent ? '%' : '')}${fasterText}`
           }
         } else {
-          ref.current.textContent = `${formatted.replace(/\.0$/, '')}${hasPercent ? '%' : ''}`
+          // Build the output string
+          let output = prefix + formatted + suffix + fasterText
+          if (hasPlus) output += '+'
+          else if (hasPercent && !suffix) output += '%'
+          
+          ref.current.textContent = output
         }
       }
     })
     
     return () => unsubscribe()
-  }, [springValue, value, numericValue, hasPlus, hasLessThan, hasReduced, hasPercent, hasDash])
+  }, [springValue, value, numericValue, hasPlus, hasReduced, hasPercent, hasDash, prefix, suffix, fasterText])
 
   if (numericValue === null || isNaN(numericValue)) {
     return <span ref={ref}>{value}</span>

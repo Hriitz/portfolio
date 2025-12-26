@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { track } from '@vercel/analytics'
 import { ArrowDown, Code, Database, Server, Cpu, Zap, Network, Cloud, Box } from 'lucide-react'
 import { profile } from '@/data/profile'
 
@@ -39,6 +40,7 @@ export function Hero() {
   }, [displayText, isDeleting, currentPhrase])
 
   const scrollToContent = () => {
+    track('hero_scroll_click')
     const element = document.getElementById('about')
     element?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -233,6 +235,7 @@ export function Hero() {
         >
           <motion.a
             href="#projects"
+            onClick={() => track('hero_cta_click', { cta: 'view_projects' })}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="rounded-lg bg-foreground px-8 py-3 text-background transition-colors hover:bg-foreground/90"
@@ -241,6 +244,7 @@ export function Hero() {
           </motion.a>
           <motion.a
             href="#contact"
+            onClick={() => track('hero_cta_click', { cta: 'get_in_touch' })}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="rounded-lg border border-border bg-card px-8 py-3 transition-colors hover:bg-accent"

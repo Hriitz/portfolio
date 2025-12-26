@@ -1,6 +1,7 @@
 'use client'
 
 import { Github, Linkedin, Mail } from 'lucide-react'
+import { track } from '@vercel/analytics'
 import { profile } from '@/data/profile'
 import { ThemeToggle } from './theme-toggle'
 
@@ -19,6 +20,7 @@ export function Footer() {
           <div className="flex items-center gap-4">
             <a
               href={`mailto:${profile.email}`}
+              onClick={() => track('social_link_click', { platform: 'email', location: 'footer' })}
               className="rounded-full border border-border bg-background p-2 transition-colors hover:bg-accent"
               aria-label="Email"
             >
@@ -28,6 +30,7 @@ export function Footer() {
               href={profile.github}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => track('social_link_click', { platform: 'github', location: 'footer' })}
               className="rounded-full border border-border bg-background p-2 transition-colors hover:bg-accent"
               aria-label="GitHub"
             >
@@ -37,6 +40,7 @@ export function Footer() {
               href={profile.linkedin}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => track('social_link_click', { platform: 'linkedin', location: 'footer' })}
               className="rounded-full border border-border bg-background p-2 transition-colors hover:bg-accent"
               aria-label="LinkedIn"
             >

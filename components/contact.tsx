@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Mail, Github, Linkedin, Send, Check, Phone, MessageSquare, Sparkles, X, AlertCircle } from 'lucide-react'
+import { track } from '@vercel/analytics'
 import { profile } from '@/data/profile'
 
 export function Contact() {
@@ -40,11 +41,23 @@ export function Contact() {
       setSubmitted(true)
       setFormData({ name: '', email: '', message: '' })
       
+      // Track successful form submission
+      track('contact_form_submit', {
+        status: 'success',
+      })
+      
       // Reset success message after 8 seconds
       setTimeout(() => setSubmitted(false), 8000)
     } catch (error) {
       console.error('Error submitting form:', error)
-      setError(error instanceof Error ? error.message : 'Failed to send message. Please try again.')
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send message. Please try again.'
+      setError(errorMessage)
+      
+      // Track failed form submission
+      track('contact_form_submit', {
+        status: 'error',
+        error: errorMessage,
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -98,6 +111,7 @@ export function Contact() {
               <div className="space-y-4">
                 <motion.a
                   href={`mailto:${profile.email}`}
+                  onClick={() => track('contact_email_click')}
                   whileHover={{ x: 4, scale: 1.02 }}
                   className="flex items-center gap-3 p-3 rounded-lg border border-border/50 bg-background/50 hover:bg-background hover:border-blue-500/50 transition-all group"
                 >
@@ -128,6 +142,7 @@ export function Contact() {
                   href={profile.github}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => track('social_link_click', { platform: 'github', location: 'contact' })}
                   whileHover={{ x: 4, scale: 1.02 }}
                   className="flex items-center gap-3 p-3 rounded-lg border border-border/50 bg-background/50 hover:bg-background hover:border-purple-500/50 transition-all group"
                 >
@@ -143,6 +158,7 @@ export function Contact() {
                   href={profile.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => track('social_link_click', { platform: 'linkedin', location: 'contact' })}
                   whileHover={{ x: 4, scale: 1.02 }}
                   className="flex items-center gap-3 p-3 rounded-lg border border-border/50 bg-background/50 hover:bg-background hover:border-cyan-500/50 transition-all group"
                 >

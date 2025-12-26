@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ArrowRight, ExternalLink, Code } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { track } from '@vercel/analytics'
 import { projects } from '@/data/projects'
 import { Project } from '@/types'
 
@@ -90,7 +91,10 @@ export function Projects() {
               style={{
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
               }}
-              onClick={() => setSelectedProject(project)}
+              onClick={() => {
+                setSelectedProject(project)
+                track('project_view', { project: project.title })
+              }}
             >
               {/* Gradient overlay on hover */}
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-pink-500/0 to-blue-500/0 group-hover:from-purple-500/10 group-hover:via-pink-500/10 group-hover:to-blue-500/10 transition-all duration-300" />
@@ -167,6 +171,7 @@ export function Projects() {
                                 href={selectedProject.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                onClick={() => track('project_external_link', { project: selectedProject.title, url: selectedProject.url })}
                                 whileHover={{ scale: 1.1 }}
                                 className="flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                               >

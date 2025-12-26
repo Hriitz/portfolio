@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import { track } from '@vercel/analytics'
 import { ThemeToggle } from './theme-toggle'
 import { Menu, X, User, Briefcase, FolderKanban, Code, Mail, Home } from 'lucide-react'
 
@@ -104,6 +105,10 @@ export function Navbar() {
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false)
     
+    // Track navigation click
+    const sectionName = href.substring(1) || 'home'
+    track('navigation_click', { section: sectionName })
+    
     // Small delay to allow menu to close smoothly
     setTimeout(() => {
       const element = document.querySelector(href)
@@ -138,6 +143,7 @@ export function Navbar() {
           onClick={(e) => {
             e.preventDefault()
             setMobileMenuOpen(false)
+            track('navigation_click', { section: 'home', source: 'logo' })
             window.scrollTo({ top: 0, behavior: 'smooth' })
           }}
           whileHover={{ scale: 1.05 }}
@@ -237,7 +243,10 @@ export function Navbar() {
         <div className="flex items-center gap-3 md:hidden">
           <ThemeToggle />
           <motion.button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => {
+              setMobileMenuOpen(!mobileMenuOpen)
+              track('mobile_menu_toggle', { action: !mobileMenuOpen ? 'open' : 'close' })
+            }}
             whileTap={{ scale: 0.95 }}
             className="relative p-2.5 rounded-xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-border/50 hover:border-blue-500/40 transition-colors"
             aria-label="Toggle menu"

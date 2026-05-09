@@ -1,110 +1,59 @@
-'use client'
-
-import { motion } from 'framer-motion'
-import { User, GraduationCap, MapPin, Award } from 'lucide-react'
+import { Panel, PanelChip } from './panel'
 import { profile } from '@/data/profile'
 import { education } from '@/data/education'
 
 export function About() {
   return (
-    <section id="about" className="relative border-b border-border bg-card py-24 px-4 md:py-32 overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-cyan-500/5 to-blue-500/5 blur-3xl" />
-      </div>
+    <Panel
+      id="about"
+      title="// man hritik"
+      actions={<PanelChip>SECTION 1</PanelChip>}
+    >
+      <div className="grid gap-5 md:grid-cols-3">
+        <div className="md:col-span-2">
+          <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-muted-2">NAME</div>
+          <div className="font-mono text-[14px] mt-1">
+            <span className="text-text">{profile.name.toLowerCase().replace(' ', '-')}</span>
+            <span className="text-muted"> — building fintech at startup velocity</span>
+          </div>
 
-      <div className="mx-auto max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            whileInView={{ scale: 1, rotate: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="inline-flex items-center justify-center mb-4"
-          >
-            <User className="h-8 w-8 text-cyan-400 mr-3" />
-            <h2 className="text-3xl font-bold md:text-4xl">About Me</h2>
-            <User className="h-8 w-8 text-blue-400 ml-3" />
-          </motion.div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Get to know my background and expertise
+          <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-muted-2 mt-4">DESCRIPTION</div>
+          <p className="text-[13.5px] leading-relaxed text-muted mt-1.5">
+            {profile.bio}
           </p>
-        </motion.div>
+          <p className="text-[13.5px] leading-relaxed text-muted mt-3">
+            Backend, infra, frontend perf — owned end-to-end across two production fintech platforms.
+            Strong focus on founding-engineer execution, product-minded backend systems, and production reliability.
+          </p>
 
-        <div className="space-y-8">
-          {/* Bio Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative rounded-2xl border bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-purple-500/10 border-cyan-500/20 p-8 backdrop-blur-sm"
-          >
-            <div className="flex items-start gap-4 mb-4">
-              <div className="p-3 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30">
-                <User className="h-6 w-6 text-cyan-400" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-bold mb-2">Who I Am</h3>
-                <p className="text-muted-foreground leading-relaxed text-lg">{profile.bio}</p>
-                <p className="text-muted-foreground leading-relaxed mt-4">
-                  I'm passionate about building robust, scalable systems that handle real financial data
-                  with precision and performance. My work focuses on backend infrastructure, API design,
-                  and ensuring security and compliance in financial applications.
-                </p>
-              </div>
-            </div>
-          </motion.div>
+          <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-muted-2 mt-5">EXAMPLES</div>
+          <ul className="mt-1.5 space-y-1 font-mono text-[12.5px] text-muted">
+            <li>$ hritik <span className="text-accent">--ship</span> founding-engineer fintech</li>
+            <li>$ hritik <span className="text-accent">--deliver</span> fast — agentic + lean stack</li>
+            <li>$ hritik <span className="text-accent">--migrate</span> goa-http to grpc-protobuf</li>
+            <li>$ hritik <span className="text-accent">--scale</span> django-platform 25k+</li>
+            <li>$ hritik <span className="text-accent">--harden</span> owasp,cert-in</li>
+          </ul>
+        </div>
 
-          {/* Education Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="relative rounded-2xl border bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-blue-500/10 border-purple-500/20 p-8 backdrop-blur-sm"
-          >
-            <div className="flex items-start gap-4">
-              <div className="p-3 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-                <GraduationCap className="h-6 w-6 text-purple-400" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                  Education
-                  {education.gpa && (
-                    <span className="text-sm font-normal text-muted-foreground">({education.gpa} GPA)</span>
-                  )}
-                </h3>
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-lg text-foreground">{education.degree}</p>
-                    <div className="flex items-center gap-4 mt-2 text-muted-foreground">
-                      <div className="flex items-center gap-2">
-                        <GraduationCap className="h-4 w-4" />
-                        <span>{education.institution}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4" />
-                        <span>{education.location}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 mt-2">
-                      <Award className="h-4 w-4 text-yellow-400" />
-                      <span className="text-sm text-muted-foreground">{education.period}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+        <div className="md:border-l md:border-border md:pl-5">
+          <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-muted-2">EDUCATION</div>
+          <div className="font-mono text-[13px] text-text mt-1.5">{education.degree}</div>
+          <div className="text-[12px] text-muted mt-1">{education.institution}</div>
+          <div className="text-[11.5px] text-muted-2 mt-0.5 font-mono">{education.period} · {education.location}</div>
+
+          <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-muted-2 mt-5">LOCATION</div>
+          <div className="font-mono text-[12.5px] text-text mt-1.5">Mumbai · IST · UTC+5:30</div>
+
+          <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-muted-2 mt-5">SEE ALSO</div>
+          <ul className="mt-1.5 space-y-0.5 font-mono text-[12px] text-muted">
+            <li>· experience(1)</li>
+            <li>· projects(1)</li>
+            <li>· skills(1)</li>
+            <li>· achievements(1)</li>
+          </ul>
         </div>
       </div>
-    </section>
+    </Panel>
   )
 }

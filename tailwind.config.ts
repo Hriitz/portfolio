@@ -10,47 +10,58 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
+        bg: 'var(--bg)',
+        panel: 'var(--panel)',
+        'panel-2': 'var(--panel-2)',
         border: 'var(--border)',
-        card: 'var(--card)',
-        'card-foreground': 'var(--card-foreground)',
+        'border-strong': 'var(--border-strong)',
+        text: 'var(--text)',
         muted: 'var(--muted)',
-        'muted-foreground': 'var(--muted-foreground)',
+        'muted-2': 'var(--muted-2)',
+        up: 'var(--up)',
+        down: 'var(--down)',
         accent: 'var(--accent)',
-        'accent-foreground': 'var(--accent-foreground)',
+        // legacy aliases so the existing components don't break mid-migration
+        background: 'var(--bg)',
+        foreground: 'var(--text)',
+        card: 'var(--panel)',
+        'card-foreground': 'var(--text)',
+        'muted-foreground': 'var(--muted)',
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-      },
-      animation: {
-        'fade-in': 'fadeIn 0.5s ease-in-out',
-        'slide-up': 'slideUp 0.5s ease-out',
-        'slide-down': 'slideDown 0.5s ease-out',
-        'scale-in': 'scaleIn 0.3s ease-out',
+        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+        blink: {
+          '0%, 55%': { opacity: '1' },
+          '60%, 100%': { opacity: '0.35' },
         },
-        slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
+        caret: {
+          '0%, 50%': { opacity: '1' },
+          '50.01%, 100%': { opacity: '0' },
         },
-        slideDown: {
-          '0%': { transform: 'translateY(-20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
+        tickerScroll: {
+          '0%':   { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
-        scaleIn: {
-          '0%': { transform: 'scale(0.95)', opacity: '0' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
+        bootIn: {
+          '0%':   { opacity: '0', transform: 'translateY(4px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        sparklineDraw: {
+          '0%':   { strokeDashoffset: '500' },
+          '100%': { strokeDashoffset: '0' },
+        },
+      },
+      animation: {
+        blink: 'blink 2.4s ease-in-out infinite',
+        caret: 'caret 1.2s steps(2) infinite',
+        ticker: 'tickerScroll 110s linear infinite',
+        'boot-in': 'bootIn 0.4s ease-out both',
       },
     },
   },
   plugins: [],
 }
 export default config
-
-

@@ -1,271 +1,67 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
-import { track } from '@vercel/analytics'
-import { ArrowDown, Code, Database, Server, Cpu, Zap, Network, Cloud, Box } from 'lucide-react'
+import Link from 'next/link'
+import { ArrowRight, FileDown, Sparkles } from 'lucide-react'
+import { Panel } from './panel'
+import { Repl } from './shell/repl'
 import { profile } from '@/data/profile'
-
-const phrases = [
-  'Building scalable FinTech platforms & backend systems',
-  'Engineering secure financial platforms',
-  'Optimizing performance at scale',
-  'Crafting robust backend solutions',
-]
+import { now } from '@/data/now'
 
 export function Hero() {
-  const [currentPhrase, setCurrentPhrase] = useState(0)
-  const [displayText, setDisplayText] = useState('')
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  useEffect(() => {
-    const typePhrase = () => {
-      const phrase = phrases[currentPhrase]
-      const currentLength = displayText.length
-
-      if (!isDeleting && currentLength < phrase.length) {
-        setDisplayText(phrase.slice(0, currentLength + 1))
-      } else if (!isDeleting && currentLength === phrase.length) {
-        setTimeout(() => setIsDeleting(true), 2000)
-      } else if (isDeleting && currentLength > 0) {
-        setDisplayText(phrase.slice(0, currentLength - 1))
-      } else if (isDeleting && currentLength === 0) {
-        setIsDeleting(false)
-        setCurrentPhrase((prev) => (prev + 1) % phrases.length)
-      }
-    }
-
-    const timer = setTimeout(typePhrase, isDeleting ? 50 : 100)
-    return () => clearTimeout(timer)
-  }, [displayText, isDeleting, currentPhrase])
-
-  const scrollToContent = () => {
-    track('hero_scroll_click')
-    const element = document.getElementById('about')
-    element?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4">
-      {/* Background decoration */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-3xl" />
-      </div>
-
-      {/* Animated tech icons */}
-      <motion.div
-        className="absolute left-10 top-20 opacity-20"
-        animate={{
-          y: [0, -20, 0],
-          rotate: [0, 5, 0],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      >
-        <Server className="h-16 w-16 text-blue-500" />
-      </motion.div>
-
-      <motion.div
-        className="absolute right-10 top-40 opacity-20"
-        animate={{
-          y: [0, 20, 0],
-          rotate: [0, -5, 0],
-        }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      >
-        <Database className="h-16 w-16 text-purple-500" />
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-20 left-1/4 opacity-20"
-        animate={{
-          y: [0, -15, 0],
-          rotate: [0, 3, 0],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      >
-        <Code className="h-16 w-16 text-green-500" />
-      </motion.div>
-
-      <motion.div
-        className="absolute left-1/4 top-1/3 opacity-15"
-        animate={{
-          y: [0, 15, 0],
-          rotate: [0, -3, 0],
-        }}
-        transition={{
-          duration: 5.5,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      >
-        <Cpu className="h-12 w-12 text-cyan-500" />
-      </motion.div>
-
-      <motion.div
-        className="absolute right-1/4 top-1/4 opacity-15"
-        animate={{
-          y: [0, -18, 0],
-          rotate: [0, 4, 0],
-        }}
-        transition={{
-          duration: 4.5,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      >
-        <Zap className="h-14 w-14 text-yellow-500" />
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-1/4 right-1/3 opacity-15"
-        animate={{
-          y: [0, 12, 0],
-          rotate: [0, -4, 0],
-        }}
-        transition={{
-          duration: 6.5,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      >
-        <Network className="h-12 w-12 text-pink-500" />
-      </motion.div>
-
-      <motion.div
-        className="absolute top-1/2 left-1/6 opacity-15"
-        animate={{
-          y: [0, -10, 0],
-          rotate: [0, 2, 0],
-        }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      >
-        <Cloud className="h-10 w-10 text-blue-400" />
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-1/3 right-1/6 opacity-15"
-        animate={{
-          y: [0, 16, 0],
-          rotate: [0, -2, 0],
-        }}
-        transition={{
-          duration: 4.8,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      >
-        <Box className="h-11 w-11 text-indigo-500" />
-      </motion.div>
-
-      {/* Main content */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="z-10 text-center"
-      >
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="mb-4 text-sm font-medium text-muted-foreground md:text-base"
-        >
-          Hello, I'm
-        </motion.p>
-
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
-          className="mb-6 text-5xl font-bold tracking-tight md:text-7xl lg:text-8xl"
-        >
+    <Panel
+      id="whoami"
+      title="// whoami"
+      meta="hritik@mumbai:~"
+      actions={
+        <span className="hidden md:inline-flex items-center gap-2 text-[10.5px] text-muted-2">
+          <Sparkles className="h-3 w-3" /> press <kbd className="rounded border border-border-strong px-1 py-0.5 text-[10px] text-muted">⌘K</kbd> for palette
+        </span>
+      }
+    >
+      <div>
+        <h1 className="font-mono text-[26px] md:text-[30px] tracking-tight leading-[1.05] text-text">
           {profile.name}
-        </motion.h1>
+        </h1>
+        <div className="mt-1.5 font-mono text-[13px] text-muted">
+          {profile.role} · {profile.location.split(',')[0]}
+        </div>
+        <div className="mt-1 font-mono text-[12px] text-muted-2">
+          open to opportunities · founding · platform · staff · freelance · <span className="text-accent">ships products fast</span>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mb-8 min-h-[60px] text-xl text-muted-foreground md:text-2xl lg:text-3xl"
-        >
-          <span className="inline-block">
-            {displayText}
-            <motion.span
-              animate={{ opacity: [1, 0] }}
-              transition={{ duration: 0.8, repeat: Infinity, repeatType: 'reverse' }}
-              className="ml-1 inline-block"
-            >
-              |
-            </motion.span>
-          </span>
-        </motion.div>
+        <div className="mt-5">
+          <Repl initialCommands={['whoami', 'now']} />
+        </div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="mb-12 text-lg text-muted-foreground md:text-xl"
-        >
-          {profile.role} • {profile.specialization}
-          <br />
-          <span className="text-base">{profile.location}</span>
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="flex flex-col gap-4 sm:flex-row sm:justify-center"
-        >
-          <motion.a
-            href="#projects"
-            onClick={() => track('hero_cta_click', { cta: 'view_projects' })}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="rounded-lg bg-foreground px-8 py-3 text-background transition-colors hover:bg-foreground/90"
+        <div className="mt-5 flex flex-wrap gap-2">
+          <Link
+            href="#proj"
+            className="inline-flex items-center gap-2 rounded-md border border-accent bg-panel-2 px-3.5 py-2 font-mono text-[12.5px] text-accent hover:bg-panel transition-colors"
           >
-            View Projects
-          </motion.a>
-          <motion.a
+            <ArrowRight className="h-3.5 w-3.5" /> see projects
+          </Link>
+          <Link
             href="#contact"
-            onClick={() => track('hero_cta_click', { cta: 'get_in_touch' })}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="rounded-lg border border-border bg-card px-8 py-3 transition-colors hover:bg-accent"
+            className="inline-flex items-center gap-2 rounded-md border border-border-strong bg-panel-2 px-3.5 py-2 font-mono text-[12.5px] text-text hover:border-accent transition-colors"
           >
-            Get In Touch
-          </motion.a>
-        </motion.div>
-      </motion.div>
+            <ArrowRight className="h-3.5 w-3.5" /> get in touch
+          </Link>
+          <Link
+            href={profile.resume}
+            download
+            className="inline-flex items-center gap-2 rounded-md border border-border-strong bg-panel-2 px-3.5 py-2 font-mono text-[12.5px] text-text hover:border-accent transition-colors"
+          >
+            <FileDown className="h-3.5 w-3.5" /> resume.pdf
+          </Link>
+        </div>
 
-      {/* Scroll hint */}
-      <motion.button
-        onClick={scrollToContent}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.1, repeat: Infinity, repeatType: 'reverse', duration: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        aria-label="Scroll to content"
-      >
-        <ArrowDown className="h-6 w-6 animate-bounce" />
-      </motion.button>
-    </section>
+        <div className="mt-5 lg:hidden rounded-md border border-border-strong bg-bg/40 p-3 font-mono text-[12px] text-muted">
+          <div className="text-[10.5px] tracking-[0.12em] uppercase text-muted-2 mb-1">// currently</div>
+          <div className="text-text">{now.company}</div>
+          <div className="text-accent">{now.focus}</div>
+        </div>
+      </div>
+    </Panel>
   )
 }
-

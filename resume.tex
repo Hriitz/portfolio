@@ -1,0 +1,151 @@
+%-------------------------
+% Resume in Latex
+% Hritik Singh — 1 Page
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{fontawesome5}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+
+% Margins (do not change)
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-0.7in}
+\addtolength{\textheight}{1.6in}
+
+\raggedright
+\raggedbottom
+
+\titleformat{\section}
+  {\vspace{-4pt}\scshape\large\bfseries}
+  {}{0em}{}[\titlerule\vspace{-5pt}]
+
+\pdfgentounicode=1
+
+% Commands
+\newcommand{\resumeItem}[1]{\item\small{#1\vspace{-2pt}}}
+\newcommand{\resumeSubheading}[4]{
+  \item
+  \begin{tabular*}{1.0\textwidth}{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & \textbf{\small #2} \\
+    \textit{\small #3} & \textit{\small #4} \\
+  \end{tabular*}\vspace{-6pt}
+}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0in,label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-6pt}}
+
+\begin{document}
+
+%---------------- HEADER ----------------
+\begin{center}
+  {\Huge \scshape Hritik Singh} \\ \vspace{2pt}
+  Mumbai, India \\ \vspace{2pt}
+  \small
+  \faPhone\ +91 8210244533 \quad
+  \href{mailto:hritik3447@gmail.com}{\faEnvelope\ hritik3447@gmail.com} \quad
+  \href{https://linkedin.com/in/hriitz}{\faLinkedin\ LinkedIn} \quad
+  \href{https://github.com/Hriitz}{\faGithub\ GitHub} \quad
+  \href{https://hritik-singh-portfolio.vercel.app}{\faGlobe\ Portfolio}
+\end{center}
+
+%---------------- EDUCATION ----------------
+\section{Education}
+\resumeSubHeadingListStart
+\resumeSubheading
+{Jain (Deemed-to-be University)}{2019 -- 2023}
+{B.Tech in Computer Science and System Engineering}{GPA: 8.1 / 10}
+\resumeSubHeadingListEnd
+
+%---------------- SKILLS ----------------
+\section{Technical Skills}
+\small{
+\textbf{Languages:} Go, Python, TypeScript, JavaScript, Java, C++, SQL \\
+\textbf{Backend:} Goa v3, gRPC (protobuf), Django, DRF, FastAPI, SQLAlchemy, Spring Boot, Node.js, GORM, JWT, RBAC, WebSockets \\
+\textbf{Frontend / Infra:} React 18, Next.js, Vite, Tailwind \textbar{} GCP, Docker, Kubernetes (GKE), Nginx, GitHub Actions, Artifact Registry \\
+\textbf{Databases / Observability:} PostgreSQL, Redis, SQLite, MongoDB \textbar{} Prometheus, OpenTelemetry, Sentry \\
+\textbf{AI / ML:} Claude API, Claude Code, Cursor, MCP, multi-LLM orchestration, PyTorch, transformers, scikit-learn, pandas
+}
+\vspace{-10pt}
+
+%---------------- EXPERIENCE ----------------
+\section{Experience}
+\resumeSubHeadingListStart
+
+\resumeSubheading
+{Spring Street}{Nov 2025 -- Present}
+{Founding / Platform Engineer (Full-Stack)}{On-site, Mumbai}
+\resumeItemListStart
+\resumeItem{\textbf{Built the broker-grade fintech platform from scratch} as the founding engineer --- backend, frontend, infrastructure, CI/CD, and observability owned end-to-end.}
+\resumeItem{Migrated transport from \textbf{Goa HTTP to gRPC (protobuf)} for tighter contracts and lower payloads; designed schema evolution across services.}
+\resumeItem{Implemented real-time \textbf{portfolio + order streaming over WebSockets} and an \textbf{exactly-once outbox} with reconciliation for trading ops.}
+\resumeItem{Built secure auth: \textbf{JWT, refresh-token rotation, RBAC, broker impersonation}; provisioned \textbf{GKE on GCP} via Docker + GitHub Actions + Artifact Registry; instrumented \textbf{Prometheus + OpenTelemetry}.}
+\resumeItem{Optimized React 18 + Vite frontend with code-splitting and lazy loading, reducing bundle size by \textbf{40--50\%}.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Wright Research}{Dec 2023 -- Feb 2026}
+{Software Engineer (Full-Stack / Platform)}{Remote}
+\resumeItemListStart
+\resumeItem{Architected and scaled \textbf{Django + DRF backend} powering portfolio management and mutual fund analytics for \textbf{25,000+ users}; led/mentored \textbf{5+ interns and juniors}.}
+\resumeItem{Cut dashboard queries by \textbf{60--80\%} via routing, indexing, query optimization; migrated cache to \textbf{Redis (70--85\% hit)}, reducing API latency \textbf{2--3s -> $<$500ms}.}
+\resumeItem{Built the \textbf{Mutual Fund Review system} end-to-end --- \textbf{1000+ portfolios} processed with risk, diversification, and benchmark analysis.}
+\resumeItem{Drove perf wins: PageSpeed \textbf{75+ mobile / 90+ desktop}, \textbf{LCP --40\%}, \textbf{CLS 0.27 -> $<$0.1}, page weight \textbf{--15--20MB}.}
+\resumeItem{Remediated \textbf{CERT-In} findings + OWASP \textbf{A2/A3/A5/A7/A10} via session invalidation, CSP, HSTS, secure headers, audit logging.}
+\resumeItem{Owned \textbf{production ops on GCP} (Nginx, Gunicorn, Redis, Cloud CDN, Sentry); \textbf{99.9\% uptime}, MTTR \textbf{--30\%}.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Floworx}{Sept 2023 -- Nov 2023}
+{Junior Software Engineer}{Bengaluru}
+\resumeItemListStart
+\resumeItem{Built backend APIs in \textbf{Node.js, Express, TypeScript, PostgreSQL}; documented \textbf{Spring Boot} APIs with Swagger.}
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%---------------- PROJECTS ----------------
+\section{Projects}
+\resumeSubHeadingListStart
+
+\resumeSubheading
+{Njord --- Personal Finance Tracker}{}
+{Go, SQLite, Telegram Bot API, systemd}{}
+\resumeItemListStart
+\resumeItem{Self-hosted finance tracker for the Indian banking ecosystem with idempotent ingestion + modular per-bank parsers; single Go binary on a \textbf{\$5/mo droplet}; daily-driver since 2025.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Globradar --- AI Market Intelligence}{}
+{Python, Claude API, multi-LLM workflows}{}
+\resumeItemListStart
+\resumeItem{Bloomberg-style market intelligence + alerting; \textbf{multi-LLM split} (Sonnet for reasoning, Haiku for high-volume enrichment) with streaming alert workflow.}
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%---------------- ACHIEVEMENTS ----------------
+\section{Achievements}
+\resumeSubHeadingListStart
+\resumeSubheading
+{Smart India Hackathon}{2022}
+{Grand Finalist}{}
+\resumeItemListStart
+\resumeItem{Led an AI-driven pronunciation correction system under a Ministry of Defence problem statement.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\end{document}

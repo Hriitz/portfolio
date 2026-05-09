@@ -1,262 +1,113 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Code2, Server, Palette, Database, Settings, Sparkles } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { Panel } from './panel'
+import { LangBar } from './charts/lang-bar'
 import { skills } from '@/data/skills'
 import { Skill } from '@/types'
+import type { LanguageStat } from '@/lib/github-contributions'
 
-const categoryConfig: Record<Skill['category'], { label: string; icon: any; color: string; bgGradient: string }> = {
-  language: {
-    label: 'Languages',
-    icon: Code2,
-    color: 'text-blue-400',
-    bgGradient: 'from-blue-500/10 to-blue-600/10 border-blue-500/20',
-  },
-  backend: {
-    label: 'Backend',
-    icon: Server,
-    color: 'text-purple-400',
-    bgGradient: 'from-purple-500/10 to-purple-600/10 border-purple-500/20',
-  },
-  frontend: {
-    label: 'Frontend',
-    icon: Palette,
-    color: 'text-pink-400',
-    bgGradient: 'from-pink-500/10 to-pink-600/10 border-pink-500/20',
-  },
-  infra: {
-    label: 'Infrastructure',
-    icon: Database,
-    color: 'text-green-400',
-    bgGradient: 'from-green-500/10 to-green-600/10 border-green-500/20',
-  },
-  tools: {
-    label: 'Tools & Observability',
-    icon: Settings,
-    color: 'text-orange-400',
-    bgGradient: 'from-orange-500/10 to-orange-600/10 border-orange-500/20',
-  },
+const QUADRANTS: { key: Skill['category']; title: string; dot: string }[] = [
+  { key: 'backend',  title: 'BACKEND',   dot: 'var(--accent)' },
+  { key: 'frontend', title: 'FRONTEND',  dot: '#ffb86c' },
+  { key: 'infra',    title: 'INFRA',     dot: '#7dd3fc' },
+  { key: 'tools',    title: 'TOOLS · AI · DATA', dot: '#c084fc' },
+  { key: 'language', title: 'LANGUAGES', dot: 'var(--text)' },
+]
+
+const RING_LABEL: Record<number, string> = {
+  1: 'mastery',
+  2: 'strong',
+  3: 'working',
+  4: 'exposure',
 }
 
-export function Skills() {
-  const [hoveredSkill, setHoveredSkill] = useState<Skill | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState<Skill['category'] | null>(null)
+export function Skills({ langs }: { langs?: LanguageStat[] }) {
+  const [filter, setFilter] = useState<'all' | 1 | 2>('all')
 
-  const skillsByCategory = skills.reduce(
-    (acc, skill) => {
-      const category = skill.category
-      if (!acc[category]) {
-        acc[category] = []
-      }
-      acc[category].push(skill)
-      return acc
-    },
-    {} as Record<string, Skill[]>
-  )
+  const grouped = useMemo(() => {
+    const map: Record<string, Skill[]> = {}
+    skills.forEach(s => { (map[s.category] ||= []).push(s) })
+    return map
+  }, [])
+
+  const filterSkills = (list: Skill[]) => {
+    if (filter === 'all') return list
+    return list.filter(s => s.ring <= filter)
+  }
 
   return (
-    <section id="skills" className="relative border-b border-border bg-background py-24 px-4 md:py-32 overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute left-1/4 top-1/4 h-[400px] w-[400px] rounded-full bg-gradient-to-r from-blue-500/5 to-purple-500/5 blur-3xl" />
-        <div className="absolute right-1/4 bottom-1/4 h-[400px] w-[400px] rounded-full bg-gradient-to-r from-pink-500/5 to-orange-500/5 blur-3xl" />
-      </div>
-
-      <div className="mx-auto max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="inline-flex items-center justify-center mb-4"
-          >
-            <Sparkles className="h-8 w-8 text-blue-400 mr-3" />
-            <h2 className="text-3xl font-bold md:text-4xl">Technical Skills</h2>
-            <Sparkles className="h-8 w-8 text-purple-400 ml-3" />
-          </motion.div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Technologies and tools I use to build scalable, performant systems
-          </p>
-        </motion.div>
-
-        <div className="grid gap-8 lg:grid-cols-2">
-          {Object.entries(skillsByCategory).map(([category, categorySkills], categoryIndex) => {
-            const config = categoryConfig[category as Skill['category']]
-            const Icon = config.icon
-            const isSelected = selectedCategory === category || selectedCategory === null
-
-            return (
-              <motion.div
-                key={category}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
-                className="group"
-                onMouseEnter={() => setSelectedCategory(category as Skill['category'])}
-                onMouseLeave={() => setSelectedCategory(null)}
-              >
-                <div 
-                  className="relative h-full rounded-2xl border p-6 transition-all duration-300"
-                  style={{
-                    background: config.bgGradient.includes('blue') ? 'linear-gradient(to bottom right, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1))' :
-                                config.bgGradient.includes('purple') ? 'linear-gradient(to bottom right, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.1))' :
-                                config.bgGradient.includes('pink') ? 'linear-gradient(to bottom right, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.1))' :
-                                config.bgGradient.includes('green') ? 'linear-gradient(to bottom right, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.1))' :
-                                config.bgGradient.includes('orange') ? 'linear-gradient(to bottom right, rgba(249, 115, 22, 0.1), rgba(234, 88, 12, 0.1))' : undefined,
-                    borderColor: config.bgGradient.includes('blue') ? 'rgba(59, 130, 246, 0.2)' :
-                                config.bgGradient.includes('purple') ? 'rgba(168, 85, 247, 0.2)' :
-                                config.bgGradient.includes('pink') ? 'rgba(236, 72, 153, 0.2)' :
-                                config.bgGradient.includes('green') ? 'rgba(34, 197, 94, 0.2)' :
-                                config.bgGradient.includes('orange') ? 'rgba(249, 115, 22, 0.2)' : undefined,
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                  }}
-                >
-                  {/* Category Header */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div 
-                      className="p-2 rounded-lg border"
-                      style={{
-                        background: config.bgGradient.includes('blue') ? 'linear-gradient(to bottom right, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1))' :
-                                    config.bgGradient.includes('purple') ? 'linear-gradient(to bottom right, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.1))' :
-                                    config.bgGradient.includes('pink') ? 'linear-gradient(to bottom right, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.1))' :
-                                    config.bgGradient.includes('green') ? 'linear-gradient(to bottom right, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.1))' :
-                                    config.bgGradient.includes('orange') ? 'linear-gradient(to bottom right, rgba(249, 115, 22, 0.1), rgba(234, 88, 12, 0.1))' : undefined,
-                        borderColor: config.color.includes('blue') ? 'rgba(96, 165, 250, 0.2)' :
-                                    config.color.includes('purple') ? 'rgba(196, 181, 253, 0.2)' :
-                                    config.color.includes('pink') ? 'rgba(251, 113, 133, 0.2)' :
-                                    config.color.includes('green') ? 'rgba(74, 222, 128, 0.2)' :
-                                    config.color.includes('orange') ? 'rgba(251, 146, 60, 0.2)' : undefined,
-                      }}
-                    >
-                      <Icon className={`h-6 w-6 ${config.color}`} />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold">{config.label}</h3>
-                      <p className="text-sm text-muted-foreground">{categorySkills.length} technologies</p>
-                    </div>
-                  </div>
-
-                  {/* Skills Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    <AnimatePresence>
-                      {categorySkills.map((skill, index) => {
-                        const isHovered = hoveredSkill?.name === skill.name
-                        return (
-                          <motion.button
-                            key={skill.name}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ 
-                              opacity: isSelected ? 1 : 0.3,
-                              scale: isSelected ? 1 : 0.95,
-                            }}
-                            exit={{ opacity: 0, scale: 0.8 }}
-                            transition={{ delay: index * 0.02 }}
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            onHoverStart={() => setHoveredSkill(skill)}
-                            onHoverEnd={() => setHoveredSkill(null)}
-                            className="relative p-3 rounded-xl border bg-background/50 backdrop-blur-sm text-sm font-medium transition-all duration-200 border-border/50 hover:border-border"
-                            style={isHovered ? {
-                              borderColor: config.color.includes('blue') ? 'rgba(96, 165, 250, 0.5)' :
-                                          config.color.includes('purple') ? 'rgba(196, 181, 253, 0.5)' :
-                                          config.color.includes('pink') ? 'rgba(251, 113, 133, 0.5)' :
-                                          config.color.includes('green') ? 'rgba(74, 222, 128, 0.5)' :
-                                          config.color.includes('orange') ? 'rgba(251, 146, 60, 0.5)' : undefined,
-                              boxShadow: config.color.includes('blue') ? '0 10px 15px -3px rgba(96, 165, 250, 0.2)' :
-                                         config.color.includes('purple') ? '0 10px 15px -3px rgba(196, 181, 253, 0.2)' :
-                                         config.color.includes('pink') ? '0 10px 15px -3px rgba(251, 113, 133, 0.2)' :
-                                         config.color.includes('green') ? '0 10px 15px -3px rgba(74, 222, 128, 0.2)' :
-                                         config.color.includes('orange') ? '0 10px 15px -3px rgba(251, 146, 60, 0.2)' : undefined,
-                              background: config.bgGradient.includes('blue') ? 'linear-gradient(to bottom right, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1))' :
-                                          config.bgGradient.includes('purple') ? 'linear-gradient(to bottom right, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.1))' :
-                                          config.bgGradient.includes('pink') ? 'linear-gradient(to bottom right, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.1))' :
-                                          config.bgGradient.includes('green') ? 'linear-gradient(to bottom right, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.1))' :
-                                          config.bgGradient.includes('orange') ? 'linear-gradient(to bottom right, rgba(249, 115, 22, 0.1), rgba(234, 88, 12, 0.1))' : undefined,
-                            } : {}}
-                          >
-                            <span className={isHovered ? config.color : ''}>{skill.name}</span>
-                            
-                            {/* Hover tooltip */}
-                            <AnimatePresence>
-                              {isHovered && (
-                                <motion.div
-                                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                  className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 w-64 rounded-lg border bg-background/95 backdrop-blur-md p-3 shadow-xl z-20"
-                                  style={{
-                                    background: config.bgGradient.includes('blue') ? 'linear-gradient(to bottom right, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1))' :
-                                                config.bgGradient.includes('purple') ? 'linear-gradient(to bottom right, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.1))' :
-                                                config.bgGradient.includes('pink') ? 'linear-gradient(to bottom right, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.1))' :
-                                                config.bgGradient.includes('green') ? 'linear-gradient(to bottom right, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.1))' :
-                                                config.bgGradient.includes('orange') ? 'linear-gradient(to bottom right, rgba(249, 115, 22, 0.1), rgba(234, 88, 12, 0.1))' : undefined,
-                                    borderColor: config.color.includes('blue') ? 'rgba(96, 165, 250, 0.3)' :
-                                                config.color.includes('purple') ? 'rgba(196, 181, 253, 0.3)' :
-                                                config.color.includes('pink') ? 'rgba(251, 113, 133, 0.3)' :
-                                                config.color.includes('green') ? 'rgba(74, 222, 128, 0.3)' :
-                                                config.color.includes('orange') ? 'rgba(251, 146, 60, 0.3)' : undefined,
-                                  }}
-                                >
-                                  <div className={`text-sm font-semibold mb-1 ${config.color}`}>
-                                    {skill.name}
-                                  </div>
-                                  {skill.description && (
-                                    <div className="text-xs text-muted-foreground mb-2">
-                                      {skill.description}
-                                    </div>
-                                  )}
-                                  {skill.projects && skill.projects.length > 0 && (
-                                    <div className="text-xs">
-                                      <span className="font-medium text-foreground">Used in: </span>
-                                      <span className="text-muted-foreground">
-                                        {skill.projects.join(', ')}
-                                      </span>
-                                    </div>
-                                  )}
-                                  {/* Arrow */}
-                                  <div 
-                                    className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent"
-                                    style={{
-                                      borderTopColor: config.color.includes('blue') ? 'rgba(59, 130, 246, 0.3)' :
-                                                      config.color.includes('purple') ? 'rgba(168, 85, 247, 0.3)' :
-                                                      config.color.includes('pink') ? 'rgba(236, 72, 153, 0.3)' :
-                                                      config.color.includes('green') ? 'rgba(34, 197, 94, 0.3)' :
-                                                      config.color.includes('orange') ? 'rgba(249, 115, 22, 0.3)' : undefined,
-                                    }}
-                                  />
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </motion.button>
-                        )
-                      })}
-                    </AnimatePresence>
-                  </div>
-                </div>
-              </motion.div>
-            )
-          })}
+    <Panel
+      id="skills"
+      title="// skills"
+      meta={`${skills.length} entries`}
+      actions={
+        <div className="flex items-center gap-1">
+          {([
+            ['all', 'all'],
+            [1,     'mastery'],
+            [2,     'strong+'],
+          ] as const).map(([k, label]) => (
+            <button
+              key={String(k)}
+              onClick={() => setFilter(k)}
+              className={`rounded border px-1.5 py-0.5 text-[10px] tracking-[0.08em] uppercase transition-colors ${
+                filter === k ? 'border-accent text-accent' : 'border-border-strong text-muted hover:text-text'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
+      }
+    >
+      {langs && langs.length > 0 && (
+        <div className="mb-6 pb-5 border-b border-dashed border-border-strong">
+          <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-muted-2 mb-3 flex items-center gap-2">
+            // languages · live from github
+            <span className="rounded border border-up px-1 py-0.5 text-[9px] tracking-[0.08em] text-up">LIVE</span>
+            <span className="text-muted-2">aggregated across recent repos</span>
+          </div>
+          <LangBar stats={langs} />
+        </div>
+      )}
 
-        {/* Legend */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="mt-12 text-center text-sm text-muted-foreground"
-        >
-          <p>Hover over skills to see detailed information and project usage</p>
-        </motion.div>
+      <div className="space-y-5">
+        {QUADRANTS.map(q => {
+          const items = filterSkills(grouped[q.key] ?? []).slice().sort((a, b) => a.ring - b.ring)
+          if (!items.length) return null
+          return (
+            <div key={q.key}>
+              <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-muted-2 mb-2.5 flex items-center gap-2">
+                <span className="inline-block h-2 w-2 rounded-full" style={{ background: q.dot }} />
+                {q.title}
+                <span className="text-muted-2">· {items.length}</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {items.map(s => (
+                  <span
+                    key={s.name}
+                    className="group relative rounded-md border bg-bg/40 px-2.5 py-1 font-mono text-[12.5px] cursor-help transition-colors"
+                    style={{
+                      borderColor: s.ring === 1 ? q.dot : 'var(--border-strong)',
+                      color: s.ring === 1 ? q.dot : s.ring === 2 ? 'var(--text)' : 'var(--muted)',
+                    }}
+                    title={`${s.name} · ${RING_LABEL[s.ring]}${s.description ? ' · ' + s.description : ''}`}
+                  >
+                    {s.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )
+        })}
       </div>
-    </section>
+
+      <div className="mt-5 font-mono text-[11px] text-muted-2 flex flex-wrap gap-x-5 gap-y-1">
+        <span><span className="inline-block h-1.5 w-1.5 rounded-full bg-accent mr-1.5 align-middle" /> filled border = mastery</span>
+        <span>· dim border = strong / working</span>
+        <span>· hover for details</span>
+      </div>
+    </Panel>
   )
 }

@@ -6,6 +6,8 @@
 \documentclass[letterpaper,11pt]{article}
 
 \usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
 \usepackage[empty]{fullpage}
 \usepackage{titlesec}
 \usepackage{enumitem}
@@ -74,7 +76,7 @@
 \section{Technical Skills}
 \small{
 \textbf{Languages:} Go, Python, TypeScript, JavaScript, Java, C++, SQL \\
-\textbf{Backend:} Goa v3, gRPC (protobuf), Django, DRF, FastAPI, SQLAlchemy, Spring Boot, Node.js, GORM, JWT, RBAC, WebSockets \\
+\textbf{Backend:} Goa v3, Connect-RPC (protobuf), Django, DRF, FastAPI, SQLAlchemy, Spring Boot, Node.js, GORM, JWT, RBAC, WebSockets \\
 \textbf{Frontend / Infra:} React 18, Next.js, Vite, Tailwind \textbar{} GCP, Docker, Kubernetes (GKE), Nginx, GitHub Actions, Artifact Registry \\
 \textbf{Databases / Observability:} PostgreSQL, Redis, SQLite, MongoDB \textbar{} Prometheus, OpenTelemetry, Sentry \\
 \textbf{AI / ML:} Claude API, Claude Code, Cursor, MCP, multi-LLM orchestration, PyTorch, transformers, scikit-learn, pandas
@@ -90,7 +92,7 @@
 {Founding / Platform Engineer (Full-Stack)}{On-site, Mumbai}
 \resumeItemListStart
 \resumeItem{\textbf{Built the broker-grade fintech platform from scratch} as the founding engineer --- backend, frontend, infrastructure, CI/CD, and observability owned end-to-end.}
-\resumeItem{Migrated transport from \textbf{Goa HTTP to gRPC (protobuf)} for tighter contracts and lower payloads; designed schema evolution across services.}
+\resumeItem{Migrated transport from \textbf{Goa HTTP to Connect-RPC (protobuf)} for tighter contracts and lower payloads; designed schema evolution across services.}
 \resumeItem{Implemented real-time \textbf{portfolio + order streaming over WebSockets} and an \textbf{exactly-once outbox} with reconciliation for trading ops.}
 \resumeItem{Built secure auth: \textbf{JWT, refresh-token rotation, RBAC, broker impersonation}; provisioned \textbf{GKE on GCP} via Docker + GitHub Actions + Artifact Registry; instrumented \textbf{Prometheus + OpenTelemetry}.}
 \resumeItem{Optimized React 18 + Vite frontend with code-splitting and lazy loading, reducing bundle size by \textbf{40--50\%}.}
@@ -101,9 +103,9 @@
 {Software Engineer (Full-Stack / Platform)}{Remote}
 \resumeItemListStart
 \resumeItem{Architected and scaled \textbf{Django + DRF backend} powering portfolio management and mutual fund analytics for \textbf{25,000+ users}; led/mentored \textbf{5+ interns and juniors}.}
-\resumeItem{Cut dashboard queries by \textbf{60--80\%} via routing, indexing, query optimization; migrated cache to \textbf{Redis (70--85\% hit)}, reducing API latency \textbf{2--3s -> $<$500ms}.}
+\resumeItem{Cut dashboard queries by \textbf{60--80\%} via routing, indexing, query optimization; migrated cache to \textbf{Redis (70--85\% hit)}, reducing API latency \textbf{2--3s $\to$ <500ms}.}
 \resumeItem{Built the \textbf{Mutual Fund Review system} end-to-end --- \textbf{1000+ portfolios} processed with risk, diversification, and benchmark analysis.}
-\resumeItem{Drove perf wins: PageSpeed \textbf{75+ mobile / 90+ desktop}, \textbf{LCP --40\%}, \textbf{CLS 0.27 -> $<$0.1}, page weight \textbf{--15--20MB}.}
+\resumeItem{Drove perf wins: PageSpeed \textbf{75+ mobile / 90+ desktop}, \textbf{LCP --40\%}, \textbf{CLS 0.27 $\to$ <0.1}, page weight \textbf{--15--20MB}.}
 \resumeItem{Remediated \textbf{CERT-In} findings + OWASP \textbf{A2/A3/A5/A7/A10} via session invalidation, CSP, HSTS, secure headers, audit logging.}
 \resumeItem{Owned \textbf{production ops on GCP} (Nginx, Gunicorn, Redis, Cloud CDN, Sentry); \textbf{99.9\% uptime}, MTTR \textbf{--30\%}.}
 \resumeItemListEnd

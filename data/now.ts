@@ -4,7 +4,7 @@ import { NowState } from '@/types'
 // Sourced from the resume — Spring Street is the current employer + active migration work.
 export const now: Pick<NowState, 'company' | 'focus' | 'detail' | 'status' | 'location'> = {
   company: 'Spring Street',
-  focus: 'Goa HTTP → gRPC (protobuf) migration',
+  focus: 'Goa HTTP → Connect-RPC (protobuf) migration',
   detail: 'broker-grade trading infra · WebSocket streaming · exactly-once outbox',
   status: 'online',
   location: 'Mumbai · IST',

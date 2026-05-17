@@ -30,8 +30,8 @@ export function ExperienceTimeline() {
                 {e.achievements.map((a, j) => (
                   <li key={j}>
                     {/* highlight key terms */}
-                    {a.split(/(\bGoa HTTP → gRPC \(protobuf\)\b|\bWebSockets?\b|\b25,000\+ users\b|\b<500ms\b|\b70–85% hit\b|\b−40%\b|\b0\.27 → <0\.1\b|\b−90% manual effort, −80% errors\b|\bOpenTelemetry\b|\bPrometheus\b|\bRBAC\b|\b99\.9% uptime\b|\b−30% incident MTTR\b)/g).map((part, k) =>
-                      /Goa HTTP → gRPC \(protobuf\)|WebSockets?|25,000\+ users|<500ms|70–85% hit|−40%|0\.27 → <0\.1|−90% manual effort, −80% errors|OpenTelemetry|Prometheus|RBAC|99\.9% uptime|−30% incident MTTR/.test(part) ? (
+                    {a.split(/(\bGoa HTTP → Connect-RPC \(protobuf\)\b|\bWebSockets?\b|\b25,000\+ users\b|\b<500ms\b|\b70–85% hit\b|\b−40%\b|\b0\.27 → <0\.1\b|\b−90% manual effort, −80% errors\b|\bOpenTelemetry\b|\bPrometheus\b|\bRBAC\b|\b99\.9% uptime\b|\b−30% incident MTTR\b)/g).map((part, k) =>
+                      /Goa HTTP → Connect-RPC \(protobuf\)|WebSockets?|25,000\+ users|<500ms|70–85% hit|−40%|0\.27 → <0\.1|−90% manual effort, −80% errors|OpenTelemetry|Prometheus|RBAC|99\.9% uptime|−30% incident MTTR/.test(part) ? (
                         <b key={k} className="text-text font-semibold">{part}</b>
                       ) : (
                         <span key={k}>{part}</span>

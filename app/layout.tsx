@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     'Go',
     'Goa',
     'protobuf',
-    'gRPC',
+    'Connect-RPC',
     'React 18',
     'GKE',
     'OpenTelemetry',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://hritik-singh-portfolio.vercel.app',
     title: 'Hritik Singh · Founding / Platform Engineer',
-    description: 'Building broker-grade fintech · Go · Goa → gRPC (protobuf) · GKE',
+    description: 'Building broker-grade fintech · Go · Goa → Connect-RPC (protobuf) · GKE',
     siteName: 'hritik.dev',
   },
   twitter: {

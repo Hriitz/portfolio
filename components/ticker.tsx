@@ -13,7 +13,7 @@ const ITEMS: [string, string, 'up' | 'down' | ''][] = [
   ['BUNDLE',        '−40 to −50%',      'up'],
   ['UPTIME',        '99.9% (Wright) · 99.95% (Spring)', 'up'],
   ['MTTR',          '−30%',             'up'],
-  ['MIGRATION',     'Goa HTTP → gRPC (protobuf)', ''],
+  ['MIGRATION',     'Goa HTTP → Connect-RPC (protobuf)', ''],
   ['STREAMING',     'WebSockets · portfolio + orders', ''],
   ['STACK',         'Go · Goa · React 18 · GKE · OTel', ''],
   ['REGION',        'asia-south1', ''],

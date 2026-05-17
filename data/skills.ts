@@ -16,8 +16,8 @@ export const skills: Skill[] = [
   // ── Backend (TR) — Go side ───────────────────────────────────
   { name: 'Go',          category: 'backend', ring: 1, angle: 14,  description: 'Primary backend language — concurrent services, single-binary deploys' },
   { name: 'Goa v3',      category: 'backend', ring: 1, angle: 28,  description: 'DSL-driven service framework — current production stack' },
-  { name: 'gRPC',        category: 'backend', ring: 1, angle: 42,  description: 'protobuf RPC transport — Goa HTTP → gRPC migration in flight' },
-  { name: 'protobuf',    category: 'backend', ring: 1, angle: 56,  description: 'Wire format for the RPC layer + schema evolution' },
+  { name: 'Connect-RPC', category: 'backend', ring: 1, angle: 42,  description: 'protobuf RPC transport (Buf Connect) — Goa HTTP → Connect-RPC migration in flight' },
+  { name: 'protobuf',    category: 'backend', ring: 1, angle: 56,  description: 'Wire format for the Connect-RPC layer + schema evolution' },
   { name: 'GORM',        category: 'backend', ring: 2, angle: 18,  description: 'Type-safe ORM over PostgreSQL & SQLite' },
   { name: 'WebSockets',  category: 'backend', ring: 1, angle: 70,  description: 'Real-time portfolio + order streaming · gorilla/websocket' },
   { name: 'JWT / RBAC',  category: 'backend', ring: 1, angle: 84,  description: 'Auth, refresh-token rotation, broker impersonation flows' },

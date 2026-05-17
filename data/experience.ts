@@ -12,7 +12,7 @@ export const experiences: Experience[] = [
       'Founding engineer — built the entire broker-grade fintech platform from scratch. Backend, frontend, infra, deployment, observability owned end-to-end.',
     achievements: [
       'Built the full platform from scratch — backend, frontend, infra, CI/CD, observability — as the founding engineer on Go + Goa v3 + PostgreSQL + GKE',
-      'Migrated transport from Goa HTTP → gRPC (protobuf) for tighter contracts and lower payload',
+      'Migrated transport from Goa HTTP → Connect-RPC (protobuf) for tighter contracts and lower payload',
       'Real-time portfolio & order streaming over WebSockets with low-latency event delivery',
       'Designed exactly-once outbox execution + reconciliation workflows for trading ops',
       'Secure APIs: JWT auth, refresh-token rotation, RBAC, broker impersonation, session security',
@@ -22,7 +22,7 @@ export const experiences: Experience[] = [
       'Improved Lighthouse scores, reduced TTI through aggressive perf optimization',
     ],
     technologies: [
-      'Go', 'Goa v3', 'protobuf', 'gRPC', 'PostgreSQL', 'React 18', 'TypeScript', 'Vite', 'Tailwind CSS',
+      'Go', 'Goa v3', 'protobuf', 'Connect-RPC', 'PostgreSQL', 'React 18', 'TypeScript', 'Vite', 'Tailwind CSS',
       'Docker', 'Kubernetes', 'GKE', 'GitHub Actions', 'Artifact Registry', 'Prometheus', 'OpenTelemetry',
       'WebSockets', 'JWT', 'RBAC', 'Redis',
     ],

@@ -77,7 +77,7 @@ export const COMMANDS: ShellCommand[] = [
     run: () => lines(
       text(`${profile.name} — ${profile.role}`),
       text(`${profile.location} · open to roles + freelance projects`, 'muted'),
-      text(`stack: Go · Goa · gRPC (protobuf) · React 18 · GKE · OpenTelemetry · FastAPI · pgsql`, 'muted'),
+      text(`stack: Go · Goa · Connect-RPC (protobuf) · React 18 · GKE · OpenTelemetry · FastAPI · pgsql`, 'muted'),
     ),
   },
   {

@@ -30,7 +30,7 @@ export function About() {
           <ul className="mt-1.5 space-y-1 font-mono text-[12.5px] text-muted">
             <li>$ hritik <span className="text-accent">--ship</span> founding-engineer fintech</li>
             <li>$ hritik <span className="text-accent">--deliver</span> fast — agentic + lean stack</li>
-            <li>$ hritik <span className="text-accent">--migrate</span> goa-http to grpc-protobuf</li>
+            <li>$ hritik <span className="text-accent">--migrate</span> goa-http to connect-rpc</li>
             <li>$ hritik <span className="text-accent">--scale</span> django-platform 25k+</li>
             <li>$ hritik <span className="text-accent">--harden</span> owasp,cert-in</li>
           </ul>
